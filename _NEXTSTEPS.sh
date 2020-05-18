@@ -1,0 +1,4 @@
+- create graphs for various countries and put them on the page
+- create a page - index.html - that just shows the graphs and doesn't regenerate them
+- clean up code and make it object oriented
+- make a website for it
