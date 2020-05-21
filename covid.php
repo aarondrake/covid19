@@ -61,50 +61,39 @@ foreach ($lines as $line)
 $continents_file = createMatrix($deaths_by_continent, 'continents.csv');
 $countries_file = createMatrix($deaths, 'countries.csv');
 
-$graph = new src\graphing();
+graph("Canada_vs_India", $death_counts, ['Canada','India']);
+graph("US_BRazil", $death_counts,['United_States_of_America','Brazil']);
+graph( "SouthAmerica", $death_counts, ['Peru','Venezuala','Brazil','Argentina','Chile', 'Mexico']);
+graph( "Europe", $death_counts, ['United_Kingdom','Spain','France','Germany','Italy']);
+graph( "Other", $death_counts, ['Saudi_Arabia','Egypt','Turkey','Pakistan']);
 
-$graph->createGraph("canada", [ array_reverse($death_counts['Canada']) ]);
+function graph($name, $counts, $countries)
+{
+	$graph = new src\graphing();
+    $to_plot = [];
+    foreach($countries as $country)
+    {
+        if (isset($counts[$country])) {
+			$data[] = ['data' => array_reverse($counts[$country]), 'legend' => $country];
+		}
+    }
+    $graph->createGraph($name, $data);
+    echo "<img src='${name}.png'>\n";
+}
 /**
-// Width and height of the graph
-$width = 1000; $height = 600;
+$canada = [
+	array_reverse($death_counts['Canada']),
+	array_reverse($death_counts['India'])
+];
 
-// Create a graph instance
-$graph = new Graph($width,$height);
+$continents = [
+	array_reverse($death_counts['United_States_of_America']),
+	array_reverse($death_counts['Brazil']),
+];
 
-// Specify what scale we want to use,
-// int = integer scale for the X-axis
-// int = integer scale for the Y-axis
-$graph->SetScale('intint');
-
-// Setup a title for the graph
-$graph->title->Set('Covid example');
-
-// Setup titles and X-axis labels
-$graph->xaxis->title->Set('(year from 1701)');
-
-// Setup Y-axis title
-$graph->yaxis->title->Set('(# sunspots)');
-
-// Create the linear plot
-$lineplot=new LinePlot(array_reverse($death_counts['Canada']));
-$lineplot2 = new LinePlot(array_reverse($death_counts['India']));
-
-// Add the plot to the graph
-$graph->Add($lineplot);
-$graph->Add($lineplot2);
-
-$gdImgHandler = $graph->Stroke(_IMG_HANDLER);
-
-// Stroke image to a file and browser
-
-// Default is PNG so use ".png" as suffix
-$fileName = "./canada.png";
-$graph->img->Stream($fileName);
-
-#// Send it back to browser
-#$graph->img->Headers();
-#$graph->img->Stream();
- * **/
+$graph->createGraph("canada", $canada);
+$graph->createGraph("us_brazil", $continents);
+**/
 #-------------------------------------------------------------
 
 function createMatrix($list, $name = 'data.csv')
@@ -168,5 +157,4 @@ function readCovidFile($name)
 }
 
 ?>
-<h1> Graphs</h1>
-<img src="canada.png">
+

@@ -75,7 +75,7 @@ class graphing
 		$this->y_axis_title = $y_axis_title;
 	}
 
-	public function createGraph($title , $datasets = [], $name = '', $path = "./")
+	public function createGraph($title , $datasets = [],  $name = '', $path = "./")
 	{
 		// Create a graph instance
 		$graph = new \Graph($this->getWidth(),$this->getHeight());
@@ -91,7 +91,10 @@ class graphing
 
 		foreach ($datasets as $dataset)
 		{
-			$lineplot=new \LinePlot($dataset);
+			$lineplot=new \LinePlot($dataset['data']);
+			$graph->legend->SetLayout(LEGEND_VERT);
+			$graph->legend->Pos(0.05,0.1,'left','top');
+			$lineplot->SetLegend($dataset['legend']);
 			$graph->Add($lineplot);
 		}
 		// Create the linear plot
